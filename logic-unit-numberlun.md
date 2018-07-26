@@ -14,5 +14,7 @@ In another example:a single disk-drive has one physical SCSI port.It usually pro
 
 How to select a LUN:In the early versions of SCSI,an initiator delivers a Command Descriptor Block\\(CDB\\) to a target \\(physical unit\\) and within the CDB is a 3-bit LUN field to identify the logical unit within the target.In current SCSI,the initiator delivers the CDB to a particular logical unit,so the LUN apprears in the transport layer data structures and not in the CDB.
 
-LUN vs. SCSI Device ID:The LUN is not the only way to identify a logical unit.There is also the  SCSI Device ID ,which identifies a  logical unit uniquely in the world.Labels or serial number stored in a logical unit's storage volume often serve to identify the logical unit.However,the LUN is the only way for an initiator to address a command to a particular logical unit,so initiators 
+LUN vs. SCSI Device ID:The LUN is not the only way to identify a logical unit.There is also the  SCSI Device ID ,which identifies a  logical unit uniquely in the world.Labels or serial number stored in a logical unit's storage volume often serve to identify the logical unit.However,the LUN is the only way for an initiator to address a command to a particular logical unit,so initiators often create,via a discovery process,a mapping table of LUN to other identifiers.
+
+con
 
