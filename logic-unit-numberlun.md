@@ -22,23 +22,19 @@ LUN0:There is one LUN which is required to exist in everytraget:zero.The logical
 
 Many SCSI target contain only one logical unit \(so itsLUN is necessarily zero\).Others have a small number of logical units that correspond to separate physical devices and have fixed LUNs.A large stroage systemhave up to thousands of logical units,defined logically,by administrative command,and the administrator may choose the LUN or the system may choose it .
 
-## cXtXdXsX nomenclature in Unix 
+## cXtXdXsX nomenclature in Unix
 
 From the computer perspective,SCSI LUN is only a part of the full SCSI address.The full device's address is made from the :
 
-c-part:controller ID of the host bus adapter
+* c-part:controller ID of the host bus adapter
 
-t-part:target ID identifying the SCSI target on that controller
-
-d-part: disk ID identifying a LUN on that target
-
-s-part:slice ID identifying a specific slice on that disk.
+* t-part:target ID identifying the SCSI target on that controller
+* d-part: disk ID identifying a LUN on that target
+* s-part:slice ID identifying a specific slice on that disk.
 
 In the Unix family of operationg system,these IDs are often combined into a single "name".For example,/dev/dsk/c1t2d3s4 would refer to contrller 1 target 2,disk 3,slice 4.Presently Solaris,HP-UX,NCR,and others continue to user "cXtXdXsX" nomenclature,while AIX has abandoned it in favor of more familiar names.HP-UX regers to this sa the Legacy Naming Model since version 11i v3.
 
-Ohter uses 
+Ohter uses
 
 The term logical unit number also applies to an input/output access channel within certain programming languages.
-
-
 
