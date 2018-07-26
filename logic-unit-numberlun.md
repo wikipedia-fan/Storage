@@ -16,5 +16,13 @@ How to select a LUN:In the early versions of SCSI,an initiator delivers a Comman
 
 LUN vs. SCSI Device ID:The LUN is not the only way to identify a logical unit.There is also the  SCSI Device ID ,which identifies a  logical unit uniquely in the world.Labels or serial number stored in a logical unit's storage volume often serve to identify the logical unit.However,the LUN is the only way for an initiator to address a command to a particular logical unit,so initiators often create,via a discovery process,a mapping table of LUN to other identifiers.
 
-con
+Context sensitive:The LUN identifies a logical unit only within the context of a particular initiator.So two computers that access the same disk volume may konw it by different LUNs.
+
+LUN0:There is one LUN which is required to exist in everytraget:zero.The logical unit with LUN zero is special in that it must implement a few specific commands,most notably Report LUNs,which is how an initiator can find out all the other LUNs in the target.BUt LUN zero need not porvide any ohter services.such as stroage volume.
+
+Many SCSI target contain only one logical unit \(so itsLUN is necessarily zero\).Others have a small number of logical units that correspond to separate physical devices and have fixed LUNs.A large stroage systemhave up to thousands of logical units,defined logically,by administrative command,and the administrator may choose the LUN or the system may choose it .
+
+
+
+
 
