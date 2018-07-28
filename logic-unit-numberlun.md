@@ -29,12 +29,13 @@ From the computer perspective,SCSI LUN is only a part of the full SCSI address.T
 * c-part:controller ID of the host bus adapter
 
 * t-part:target ID identifying the SCSI target on that controller
+
 * d-part: disk ID identifying a LUN on that target
 * s-part:slice ID identifying a specific slice on that disk.
 
 In the Unix family of operationg system,these IDs are often combined into a single "name".For example,/dev/dsk/c1t2d3s4 would refer to contrller 1 target 2,disk 3,slice 4.Presently Solaris,HP-UX,NCR,and others continue to user "cXtXdXsX" nomenclature,while AIX has abandoned it in favor of more familiar names.HP-UX regers to this sa the Legacy Naming Model since version 11i v3.
 
-Ohter uses
+## Ohter uses
 
 The term logical unit number also applies to an input/output access channel within certain programming languages.
 
