@@ -30,7 +30,7 @@ SCSI interfaces have often been included on computers from various manufacturers
 
 ### Parallel SCSI
 
-Initially, theSCSI Parallel Interface\(SPI\) was the only interface using the SCSI protocol. Its standardization started as a [single-ended](https://en.wikipedia.org/wiki/Single-ended_signaling) 8-bit [bus](https://en.wikipedia.org/wiki/System_bus) in 1986, transferring up to 5 MB/s, and evolved into a low-voltage [differential](https://en.wikipedia.org/wiki/Differential_signaling) 6-bit bus capable of up to 320 MB/s. The last SPI-5 standard from 2003 also defined a 640 MB/s speed which failed to be realized.
+Initially, theSCSI Parallel Interface\(SPI\) was the only interface using the SCSI protocol. Its standardization started as a [single-ended](https://en.wikipedia.org/wiki/Single-ended_signaling) 8-bit [bus](https://en.wikipedia.org/wiki/System_bus) in 1986, transferring up to 5 MB/s, and evolved into a low-voltage [differential](https://en.wikipedia.org/wiki/Differential_signaling) 6-bit bus capable of up to 320 MB/s. The last SPI-5 standard from 2003 also defined a 640 MB/s speed which failed to be realized.
 
 Parallel SCSI specifications include several synchronous transfer modes for the parallel cable, and an asynchronous mode. The asynchronous mode is a classic request/acknowledge protocol, which allows systems with a slow bus or simple systems to also use SCSI devices. Faster synchronous modes are used more frequently.
 
@@ -58,7 +58,7 @@ Serial attached SCSI \(SAS\) uses a modified Serial ATA data and power cable.
 
 The [SCSI RDMA Protocol](https://en.wikipedia.org/wiki/SCSI_RDMA_Protocol)\(SRP\) is a protocol that specifies how to transport SCSI commands over a reliable RDMA connection. This protocol can run over any RDMA-capable physical transport, e.g.[InfiniBand](https://en.wikipedia.org/wiki/InfiniBand) or [Ethernet](https://en.wikipedia.org/wiki/Ethernet) when using [RoCE](https://en.wikipedia.org/wiki/RDMA_over_Converged_Ethernet) or [iWARP](https://en.wikipedia.org/wiki/IWARP).
 
-### USB Attached SCSI 
+### USB Attached SCSI
 
 [USB Attached SCSI](https://en.wikipedia.org/wiki/USB_Attached_SCSI) allows SCSI devices to use the [Universal Serial Bus](https://en.wikipedia.org/wiki/Universal_Serial_Bus).
 
@@ -75,6 +75,52 @@ In SCSI terminology, communication takes place between an [initiator](https://en
 At the end of the command sequence, the target returns a [status code](https://en.wikipedia.org/wiki/SCSI_Status_Code) byte, such as 00h for success, 02h for an error \(called a [Check Condition](https://en.wikipedia.org/wiki/SCSI_check_condition)\), or 08h for busy. When the target returns a Check Condition in response to a command, the initiator usually then issues a [SCSI Request Sense command](https://en.wikipedia.org/w/index.php?title=SCSI_Request_Sense_Command&action=edit&redlink=1) in order to obtain a key code qualifier \([KCQ](https://en.wikipedia.org/wiki/KCQ)\) from the target. The Check Condition and Request Sense sequence involves a special SCSI protocol called a [Contingent Allegiance Condition](https://en.wikipedia.org/wiki/SCSI_contingent_allegiance_condition).
 
 There are four categories of SCSI commands: N \(non-data\), W \(writing data from initiator to target\), R \(reading data\), and B \(bidirectional\). There are about 60 different [SCSI commands](https://en.wikipedia.org/wiki/SCSI_command) in total, with the most commonly used being:
+
+Test unit ready: Queries device to see if it is ready for data transfers \(disk spun up, media loaded, etc.\).
+
+* Inquiry: Returns basic device information.
+* Request sense: Returns any error codes from the previous command that returned an error status.
+* Send diagnostic and Receive diagnostic results: runs a simple self-test, or a specialised test defined in a diagnostic page
+* Start/Stop unit: Spins disks up and down, or loads/unloads media \(CD, tape, etc.\).
+* Read capacity: Returns storage capacity.
+* Format unit: Prepares a storage medium for use. In a disk, a low level format will occur. Some tape drives will erase the tape in response to this command.
+* Read: \(four variants\): Reads data from a device.
+* Write: \(four variants\): Writes data to a device.
+* Log sense: Returns current information fromlog pages
+* Mode sense: Returns current device parameters frommode pages
+* Mode select: Sets device parameters in a mode page.
+
+Each device on the SCSI bus is assigned a unique SCSI identification number or ID. Devices may encompass multiple logical units, which are addressed by [logical unit number](https://en.wikipedia.org/wiki/Logical_unit_number)\(LUN\). Simple devices have just one LUN, more complex devices may have multiple LUNs.
+
+A "direct access" \(i.e. disk type\) storage device consists of a number of logical blocks, addressed by Logical Block Address \([LBA](https://en.wikipedia.org/wiki/SCSI_LBA)\). A typical LBA equates to 512 bytes of storage. The usage of LBAs has evolved over time and so four different command variants are provided for reading and writing data. The Read\(6\) and Write\(6\) commands contain a 21-bit LBA address. The Read\(10\), Read\(12\), Read Long, Write\(10\), Write\(12\), and Write Long commands all contain a 32-bit LBA address plus various other parameter options.
+
+The capacity of a "sequential access" \(i.e. tape-type\) device is not specified because it depends, amongst other things, on the length of the tape, which is not identified in a machine-readable way. Read and write operations on a sequential access device begin at the current tape position, not at a specific LBA. The block size on sequential access devices can either be fixed or variable, depending on the specific device. Tape devices such as half-inch [9-track tape](https://en.wikipedia.org/wiki/IBM_9_track),[DDS](https://en.wikipedia.org/wiki/Digital_Data_Storage)\(4 mm tapes physically similar to [DAT](https://en.wikipedia.org/wiki/Digital_audio_tape)\),[Exabyte](https://en.wikipedia.org/wiki/Exabyte_%28company%29), etc., support variable block sizes.
+
+## Device identification
+
+### Parallel interface
+
+On a parallel SCSI bus, a device \(e.g. host adapter, disk drive\) is identified by a "SCSI ID", which is a number in the range 0–7 on a narrow bus and in the range 0–15 on a wide bus. On earlier models a physical jumper or switch controls the SCSI ID of the initiator \([host adapter](https://en.wikipedia.org/wiki/Host_adapter)\). On modern host adapters \(since about 1997\), doing I/O to the adapter sets the SCSI ID; for example, the adapter often contains a BIOS program that runs when the computer boots up and that program has menus that let the operator choose the SCSI ID of the host adapter. Alternatively, the host adapter may come with software that must be installed on the host computer to configure the SCSI ID. The traditional SCSI ID for a host adapter is 7, as that ID has the highest priority during bus arbitration \(even on a 16 bit bus\).
+
+The SCSI ID of a device in a drive enclosure that has a back plane is set either by jumpers or by the slot in the enclosure the device is installed into, depending on the model of the enclosure. In the latter case, each slot on the enclosure's back plane delivers control signals to the drive to select a unique SCSI ID. A SCSI enclosure without a back plane often has a switch for each drive to choose the drive's SCSI ID. The enclosure is packaged with connectors that must be plugged into the drive where the jumpers are typically located; the switch emulates the necessary jumpers. While there is no standard that makes this work, drive designers typically set up their jumper headers in a consistent format that matches the way that these switches implement.
+
+Setting the bootable \(or first\) hard disk to SCSI ID 0 is an accepted IT community recommendation. SCSI ID 2 is usually set aside for the floppy disk drive while SCSI ID 3 is typically for a CD-ROM drive.
+
+### General
+
+Note that a SCSI target device \(which can be called a "physical unit"\) is often divided into smaller "logical units". For example, a high-end disk subsystem may be a single SCSI device but contain dozens of individual disk drives, each of which is a logical unit. Further, a RAID array may be a single SCSI device, but may contain many logical units, each of which is a "virtual" disk—a stripe set or mirror set constructed from portions of real disk drives. The SCSI ID, WWN, etc. in this case identifies the whole subsystem, and a second number, the logical unit number \(LUN\) identifies a disk device \(real or virtual\) within the subsystem.
+
+It is quite common, though incorrect, to refer to the logical unit itself as a "LUN".Accordingly, the actual LUN may be called a "LUN number" or "LUN id".
+
+In modern SCSI transport protocols, there is an automated process for the "discovery" of the IDs. The SSA initiator \(normally the host computer through the 'host adaptor'\) "walk the loop" to determine what devices are connected and then assigns each one a 7-bit "hop-count" value.[Fibre Channel](https://en.wikipedia.org/wiki/Fibre_Channel)– Arbitrated Loop \(FC-AL\) initiators use the LIP \(Loop Initialization Protocol\) to interrogate each device port for its WWN \([World Wide Name](https://en.wikipedia.org/wiki/World_Wide_Name)\). For iSCSI, because of the unlimited scope of the \(IP\) network, the process is quite complicated. These discovery processes occur at power-on/initialization time and also if the bus topology changes later, for example if an extra device is added.
+
+## Device Type
+
+While all SCSI controllers can work with read/write storage devices, i.e. disk and tape, some will not work with some other device types; older controllers are likely to be more limited,sometimes by their driver software, and more Device Types were added as SCSI evolved. Even CD-ROMs are not handled by all controllers. Device Type is a 5-bit field reported by a [SCSI Inquiry Command](https://en.wikipedia.org/w/index.php?title=SCSI_Inquiry_Command&action=edit&redlink=1); defined [SCSI Peripheral Device Types](https://en.wikipedia.org/wiki/SCSI_Peripheral_Device_Type) include, in addition to many varieties of storage device, printer, scanner, communications device, and a catch-all "processor" type for devices not otherwise listed.
+
+## SCSI enclosure services
+
+In larger SCSI servers, the disk-drive devices are housed in an intelligent enclosure that supports SCSI Enclosure Services \(SES\). The initiator can communicate with the enclosure using a specialized set of SCSI commands to access power, cooling, and other non-data characteristics.
 
 
 
