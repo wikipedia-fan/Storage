@@ -16,7 +16,7 @@ A SASI controller provided a bridge between a hard disk drive's low-level interf
 
 Until at least February 1982, ANSI developed the specification as "SASI" and "Shugart Associates System Interface";however, the committee\(美国工程标准委员会\) documenting\(编制\) the standard would not allow it to be named after a company. Almost a full day was devoted to agreeing to name the standard "Small Computer System Interface", which Boucher intended to be pronounced\(发音\) "sexy", but ENDL's Dal Allan pronounced\(宣告\) the new acronym\(首字母省略词\) as "scuzzy\(SCSI之读音\)" and that stuck\(卡壳\).
 
-A number of companies such as NCR Corporation, Adaptec and Optimem were early supporters of SCSI.The NCR facility in Wichita, Kansas is widely thought to have developed the industry's first SCSI controller chip; it worked the first time.
+A number of companies such as NCR Corporation, Adaptec and Optimem were early supporters of SCSI.The NCR facility\(设备设施\) in Wichita, Kansas is widely thought to have developed the industry's\(工业；行业\) first SCSI controller chip\(芯片\); it worked the first time.
 
 The "small" reference in "small computer system interface" is historical; since the mid-1990s, SCSI has been available on even the largest of computer systems.
 
