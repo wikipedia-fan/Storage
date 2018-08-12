@@ -1,5 +1,31 @@
 # iSCSI {#firstHeading}
 
+**iSCSI**（Internet Small Computer System Interface，发音为/ˈаɪskʌzi/），Internet小型计算机系统接口，又称为IP-[SAN](https://zh.wikipedia.org/wiki/SAN)，是一种基于[因特网](https://zh.wikipedia.org/wiki/%E5%9B%A0%E7%89%B9%E7%BD%91)及[SCSI-3](https://zh.wikipedia.org/wiki/SCSI-3)协议下的存储技术，由[IETF](https://zh.wikipedia.org/wiki/IETF)提出，并于2003年2月11日成为正式的标准。与传统的[SCSI](https://zh.wikipedia.org/wiki/SCSI)技术比较起来，iSCSI技术有以下三个革命性的变化：
+
+1. 把原来只用于本机的SCSI协义透过[TCP/IP](https://zh.wikipedia.org/wiki/TCP/IP)网络发送，使连接距离可作无限的地域延伸；
+2. 连接的[服务器](https://zh.wikipedia.org/wiki/%E6%9C%8D%E5%8A%A1%E5%99%A8)数量无限（原来的SCSI-3的上限是15）；
+3. 由于是服务器架构，因此也可以实现在线扩容以至动态部署。
+
+## 功能
+
+iSCSI利用了TCP/IP的port 860 和 3260 作为沟通的渠道。透过两部计算机之间利用iSCSI的协议来交换[SCSI](https://zh.wikipedia.org/wiki/SCSI)命令，让计算机可以透过高速的局域网集线来把SAN模拟成为本地的储存装置。
+
+iSCSI使用 TCP/IP 协议（一般使用TCP端口860和3260）。 本质上，iSCSI 让两个主机通过 IP 网络相互协商然后交换[SCSI](https://zh.wikipedia.org/wiki/SCSI)命令。这样一来，iSCSI 就是用广域网仿真了一个常用的高性能本地存储总线，从而创建了一个存储局域网（SAN）。不像某些 SAN 协议，iSCSI 不需要专用的电缆；它可以在已有的交换和 IP 基础架构上运行。然而，如果不使用专用的网络或者子网（ LAN 或者 VLAN ），iSCSI SAN 的部署性能可能会严重下降。于是，iSCSI 常常被认为是光纤通道（Fiber Channel）的一个低成本替代方法，而光纤通道是需要专用的基础架构的。但是，基于以太网的光纤通道（[FCoE](https://zh.wikipedia.org/wiki/FCoE)）则不需要专用的基础架构。
+
+虽然 iSCSI 可以与任意类型的 SCSI 设备进行通信，系统管理员几乎总是使用它来连接服务器计算机 （例如，数据库服务器） 和磁盘卷上存储阵列。 使用iSCSI SAN 的目的通常有以下两个：
+
+**存储集成**公司希望将不同的存储资源从分散在网络上的服务器移动到统一的位置（常常是数据中心）； 这可以让存储的分配变得更为有效。 SAN 环境中的服务器无需任何更改硬件或电缆连接就可以得到新分配的磁盘卷。
+
+**灾难恢复**公司希望把存储资源从一个数据中心镜像到另一个远程的数据中心上，后者在出现长时间停电的情况下可以用作热备份。 特别是，iSCSI SAN 使我们只需要用最小的配置更改就可以在 WAN 上面迁移整个磁盘阵列，实质上就是，把存储变成了“可路由的”，就像普通的网络通信一样。
+
+## 网络引导/启动
+
+从数据存储的角度，对于一个已经处于运行状态的计算机，任意类型的通用网络接口都可用于访问 iSCSI 设备。 然而，通用消费级网络接口却不能够从远程的 iSCSI 数据源引导无盘计算机。 相反，对于服务器而言，通常情况是，它是从一个小的本地 RAID 镜像或闪存驱动器引导设备来加载操作系统，并从本地设备启动完毕后，然后使用 iSCSI 来进行对数据存储的访问。
+
+对于配有支持网络引导的网络接口设备（网卡）的计算机，可以另外配置一台 DHCP 服务器来协助“iSCSI 启动”。 这种情况下，网卡会寻找一个提供[PXE](https://zh.wikipedia.org/wiki/PXE)或[BOOTP](https://zh.wikipedia.org/wiki/BOOTP)引导映像的 DHCP 服务器。该 DHCP 服务器会根据启动网卡的[MAC地址](https://zh.wikipedia.org/wiki/MAC%E5%9C%B0%E5%9D%80)提供对应的 iSCSI 启动目标设备/卷信息，然后计算机便可以开始从 iSCSI 远程启动的进程了。
+
+定制的 iSCSI 接口卡提供内置的 BIOS 功能，可以为该接口事先指定一个 iSCSI 目标设备，然后就可以直接从一个启动服务器进行启动，（而不需要另设一个DHCP 服务器）， 从而减少网络配置的复杂度。
+
 In computing,**iSCSI **is an acronym for**Internet Small Computer Systems Interface**, an [Internet Protocol](https://en.wikipedia.org/wiki/Internet_Protocol)\(IP\)-based storage networking standard for linking data storage facilities. It provides [block-level access](https://en.wikipedia.org/wiki/Block-level_storage) to [storage devices](https://en.wikipedia.org/wiki/Computer_data_storage) by carrying [SCSI](https://en.wikipedia.org/wiki/SCSI) commands over a [TCP/IP](https://en.wikipedia.org/wiki/TCP/IP) network. iSCSI is used to facilitate data transfers over [intranets](https://en.wikipedia.org/wiki/Intranet) and to manage storage over long distances. It can be used to transmit data over [local area networks](https://en.wikipedia.org/wiki/Local_area_network)\(LANs\),[wide area networks](https://en.wikipedia.org/wiki/Wide_area_network)\(WANs\), or the [Internet](https://en.wikipedia.org/wiki/Internet) and can enable location-independent data storage and retrieval.
 
 The [protocol](https://en.wikipedia.org/wiki/Protocol_%28computing%29) allows clients \(calledinitiators\) to send SCSI commands \([CDBs](https://en.wikipedia.org/wiki/SCSI_CDB)\) to storage devices \(targets\) on remote servers. It is a [storage area network](https://en.wikipedia.org/wiki/Storage_area_network) \(SAN\) protocol, allowing organizations to consolidate storage into [storage arrays](https://en.wikipedia.org/wiki/Storage_array) while providing clients \(such as database and web servers\) with the illusion of locally attached SCSI disks.It mainly competes with [Fibre Channel](https://en.wikipedia.org/wiki/Fibre_Channel), but unlike traditional Fibre Channel which usually requires dedicated cabling,iSCSI can be run over long distances using existing network infrastructure.iSCSI was pioneered by IBM and Cisco in 1998 and submitted as a draft standard in March 2000.
@@ -104,7 +130,7 @@ iSCSI initiators can locate appropriate storage resources using the [Internet St
 
 iSCSI initiators and targets prove their identity to each other using [CHAP](https://en.wikipedia.org/wiki/Challenge-handshake_authentication_protocol), which includes a mechanism to prevent [cleartext](https://en.wikipedia.org/wiki/Cleartext) passwords from appearing on the wire. By itself, CHAP is vulnerable to [dictionary attacks](https://en.wikipedia.org/wiki/Dictionary_attack),[spoofing](https://en.wikipedia.org/wiki/IP_address_spoofing), and [reflection attacks](https://en.wikipedia.org/wiki/Reflection_attack). If followed carefully, the best practices for using CHAP within iSCSI reduce the surface for these attacks and mitigate the risks.[\[11\]](https://en.wikipedia.org/wiki/ISCSI#cite_note-12)
 
-Additionally, as with all IP-based protocols,[IPsec](https://en.wikipedia.org/wiki/IPsec) can operate at the network layer. The iSCSI negotiation protocol is designed to accommodate other authentication schemes, though interoperability issues limit their deployment. 
+Additionally, as with all IP-based protocols,[IPsec](https://en.wikipedia.org/wiki/IPsec) can operate at the network layer. The iSCSI negotiation protocol is designed to accommodate other authentication schemes, though interoperability issues limit their deployment.
 
 ### Logical network isolation
 
@@ -120,7 +146,7 @@ While iSCSI could be implemented as just a VLAN cluster of ports on a large mult
 
 ### Authorization
 
-Because iSCSI aims to consolidate storage for many servers into a single storage array, iSCSI deployments require strategies to prevent unrelated initiators from accessing storage resources. As a pathological example, a single enterprise storage array could hold data for servers variously regulated by the [Sarbanes–Oxley Act](https://en.wikipedia.org/wiki/Sarbanes%E2%80%93Oxley_Act) for corporate accounting,[HIPAA](https://en.wikipedia.org/wiki/Health_Insurance_Portability_and_Accountability_Act) for health benefits information, and [PCI DSS](https://en.wikipedia.org/wiki/PCI_DSS) for credit card processing. During an audit, storage systems must demonstrate controls to ensure that a server under one regime cannot access the storage assets of a server under another.
+Because iSCSI aims to consolidate storage for many servers into a single storage array, iSCSI deployments require strategies to prevent unrelated initiators from accessing storage resources. As a pathological example, a single enterprise storage array could hold data for servers variously regulated by the [Sarbanes–Oxley Act](https://en.wikipedia.org/wiki/Sarbanes–Oxley_Act) for corporate accounting,[HIPAA](https://en.wikipedia.org/wiki/Health_Insurance_Portability_and_Accountability_Act) for health benefits information, and [PCI DSS](https://en.wikipedia.org/wiki/PCI_DSS) for credit card processing. During an audit, storage systems must demonstrate controls to ensure that a server under one regime cannot access the storage assets of a server under another.
 
 Typically, iSCSI storage arrays explicitly map initiators to specific target LUNs; an initiator authenticates not to the storage array, but to the specific storage asset it intends to use. However, because the target LUNs for SCSI commands are expressed both in the iSCSI negotiation protocol and in the underlying SCSI protocol, care must be taken to ensure that access control is provided consistently.
 
@@ -151,6 +177,4 @@ In the security products industry, some manufacturers use an iSCSI RAID as a tar
 ### Converters and bridges\[[edit](https://en.wikipedia.org/w/index.php?title=ISCSI&action=edit&section=19)\]
 
 Multiple systems exist that allow Fibre Channel, SCSI and SAS devices to be attached to an IP network for use via iSCSI. They can be used to allow migration from older storage technologies, access to SANs from remote servers and the linking of SANs over IP networks. An iSCSI gateway bridges IP servers to Fibre Channel SANs. The TCP connection is terminated at the gateway, which is implemented on a Fibre Channel switch or as a standalone appliance.
-
-
 
